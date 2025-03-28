@@ -1,0 +1,1 @@
+Movie{id=1, title=Interstellar, copies=2, movieType=SF, mainActor=Actor{id=1, lastname=A, firstname=null}}
