@@ -1,4 +1,4 @@
-package fr.utbm.dao;
+package fr.utbm.repository;
 
 import fr.utbm.entity.Movie;
 import fr.utbm.conf.Jdbc;
@@ -138,32 +138,39 @@ public class JdbcMovieDao {
      * @throws SQLException If a database access error occurs.
      */
     public void addMovie(Movie movie) throws SQLException {
+        String sql = "INSERT INTO movies (title, copies, movie_type, director, release_year) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet generatedKeys = null;
-
         try {
             connection = jdbc.getConnection();
-            String query = "INSERT INTO movies (title, director, release_year) VALUES (?, ?, ?)";
-            preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, movie.getTitle());
-            preparedStatement.setString(2, movie.getDirector());
-            preparedStatement.setInt(3, movie.getReleaseYear());
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(2, movie.getCopies()); // Make sure this is set correctly
+            preparedStatement.setString(3, movie.getMovieType());
+            preparedStatement.setString(4, movie.getDirector());
+            preparedStatement.setInt(5, movie.getReleaseYear());
 
-            generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                movie.setId(generatedKeys.getInt(1));
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                // Get the generated ID (if id is SERIAL)
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    movie.setId(generatedKeys.getInt(1));
+                }
             }
-            connection.commit();
+            logger.info("Movie added: {}", movie);
+
         } catch (SQLException e) {
             logger.error("Error adding movie", e);
             if (connection != null) {
-                connection.rollback();
+                connection.rollback(); // Rollback on error
             }
             throw e;
         } finally {
-            closeResources(generatedKeys, preparedStatement, connection);
+            jdbc.closeConnection(connection);
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
     }
 
@@ -201,28 +208,32 @@ public class JdbcMovieDao {
     /**
      * Deletes a movie from the database by its ID.
      *
-     * @param id The ID of the movie to delete.
+     * @param  movieId ID of the movie to delete.
      * @throws SQLException If a database access error occurs.
      */
-    public void deleteMovie(int id) throws SQLException {
+    public void deleteMovie(int movieId) throws SQLException {
+        String sql = "DELETE FROM movies WHERE id = ?";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-
         try {
             connection = jdbc.getConnection();
-            String query = "DELETE FROM movies WHERE id = ?";
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            connection.commit();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, movieId);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                logger.info("Movie deleted with id: {}", movieId);
+            } else {
+                logger.warn("No movie found with id: {}", movieId);
+            }
         } catch (SQLException e) {
             logger.error("Error deleting movie", e);
-            if (connection != null) {
-                connection.rollback();
-            }
+            // Remove connection.rollback();
             throw e;
         } finally {
-            closeResources(null, preparedStatement, connection);
+            jdbc.closeConnection(connection);
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
         }
     }
 

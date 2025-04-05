@@ -7,8 +7,8 @@ public class Movie implements java.io.Serializable {
     private int copies;
     private String movieType;
     private Actor mainActor;
-    private String director; // Added director
-    private int releaseYear; // Added release year
+    private String director;
+    private int releaseYear;
 
     public Movie() {
     }
@@ -30,6 +30,15 @@ public class Movie implements java.io.Serializable {
         this.mainActor = mainActor;
         this.director = director;
         this.releaseYear = releaseYear;
+    }
+
+    // New Constructor
+    public Movie(Integer id, String title, int copies, String movieType, Actor mainActor) {
+        this.id = id;
+        this.title = title;
+        this.copies = copies;
+        this.movieType = movieType;
+        this.mainActor = mainActor;
     }
 
     public Integer getId() {

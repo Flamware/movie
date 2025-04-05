@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/movie
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: postgres
+    username: admin
+    password: admin
   jpa:
     open-in-view: false
     hibernate:

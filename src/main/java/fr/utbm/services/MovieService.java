@@ -15,8 +15,8 @@ public class MovieService {
         }
 
         try {
-            FileMovieDao dao = new FileMovieDao();
-            dao.addMovieToDB(movie); // Assuming this method exists in FileMovieDao
+            FileMovieDao dao = new FileMovieDao("movies.txt"); // Path to the file where movies are stored
+            dao.addMovie(movie); // Assuming this method exists in FileMovieDao
             LOGGER.info("Movie registered successfully: " + movie);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to register movie: " + movie, e);
