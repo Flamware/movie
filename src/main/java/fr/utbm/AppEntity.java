@@ -11,7 +11,6 @@ public class AppEntity {
 
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("movie");
     private static EntityManager entityManager = emf.createEntityManager();
-
     public static void main(String[] args) {
 
         Test t = new Test();
