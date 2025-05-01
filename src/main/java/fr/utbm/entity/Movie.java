@@ -1,6 +1,19 @@
 package fr.utbm.entity;
 
-public class Movie implements java.io.Serializable {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+import java.io.Serializable;
+
+@Entity
+public class Movie implements Serializable {
+
+    private static final long serialVersionUID = 12323123455123L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Integer id;
     private String title;

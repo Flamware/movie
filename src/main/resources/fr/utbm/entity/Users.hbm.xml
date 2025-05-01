@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="fr.utbm.entity">
+
+    <class name="fr.utbm.entity.Users" optimistic-lock="version" table="USERS">
+
+        <!-- Primary Key Mapping -->
+        <id name="id" column="USER_ID" type="int">
+            <generator class="identity"/>
+        </id>
+
+        <!-- Property Mappings -->
+        <property name="username" column="USERNAME" type="string" not-null="true" unique="true" length="50"/>
+        <property name="password" column="PASSWORD_HASH" type="string" not-null="true" length="255"/>
+
+    </class>
+
+</hibernate-mapping>

@@ -1,6 +1,19 @@
 package fr.utbm.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Actor  implements java.io.Serializable {
+
+
+    private static final long serialVersionUID = 12323123455123L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
      private Integer id;
      private String lastname;
      private String firstname;
