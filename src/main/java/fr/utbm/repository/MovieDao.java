@@ -18,4 +18,5 @@ public interface MovieDao {
     void deleteMovie(int id) throws SQLException;
 
     List<Movie> getAllMovies() throws SQLException;
+
 }

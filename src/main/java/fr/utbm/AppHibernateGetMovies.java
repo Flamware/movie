@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
 
-public class AppHibernate {
+public class AppHibernateGetMovies {
 
     private static final Logger logger = LoggerFactory.getLogger(AppHibernate.class);
 
@@ -27,9 +27,8 @@ public class AppHibernate {
             // Inject service into controller
             DefaultMovieController movieController = new DefaultMovieController(movieService);
 
-            logger.info("Requesting movie title modification via controller...");
             // Pass the single scanner instance
-            movieController.modifyMovieTitle(mainScanner);
+            movieController.getMovies();
 
             // You could call other controller methods here too, passing the same mainScanner
 
