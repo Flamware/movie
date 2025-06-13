@@ -16,7 +16,7 @@
     <property name="copies" type="int">
       <column name="COPIES" not-null="true"/>
     </property>
-    <property name="movieType" type="string">
+    <property name="getMovietype" type="string">
       <column length="20" name="MOVIE_TYPE" not-null="true"/>
     </property>
     <property name="director" type="string">

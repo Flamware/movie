@@ -1,11 +1,9 @@
 package fr.utbm.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class Movie implements Serializable {
@@ -14,43 +12,59 @@ public class Movie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private int copies;
-    private String movieType;
+
+    @Column(nullable = false)
+    private String movietype;
+
+    @OneToOne(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Actor mainActor;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "movie_actor",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private List<Actor> actors;
+
     private String director;
     private int releaseYear;
 
     public Movie() {
     }
 
-    public Movie(Integer id, String title, int copies, String movieType, String director, int releaseYear) {
+    public Movie(Integer id, String title, int copies, String movietype, String director, int releaseYear) {
         this.id = id;
         this.title = title;
         this.copies = copies;
-        this.movieType = movieType;
+        this.movietype = movietype;
         this.director = director;
         this.releaseYear = releaseYear;
     }
 
-    public Movie(Integer id, String title, int copies, String movieType, Actor mainActor, String director, int releaseYear) {
+    public Movie(Integer id, String title, int copies, String movietype, Actor mainActor, String director, int releaseYear) {
         this.id = id;
         this.title = title;
         this.copies = copies;
-        this.movieType = movieType;
+        this.movietype = movietype;
         this.mainActor = mainActor;
         this.director = director;
         this.releaseYear = releaseYear;
     }
 
     // New Constructor
-    public Movie(Integer id, String title, int copies, String movieType, Actor mainActor) {
+    public Movie(Integer id, String title, int copies, String movietype, Actor mainActor) {
         this.id = id;
         this.title = title;
         this.copies = copies;
-        this.movieType = movieType;
+        this.movietype = movietype;
         this.mainActor = mainActor;
     }
 
@@ -78,12 +92,12 @@ public class Movie implements Serializable {
         this.copies = copies;
     }
 
-    public String getMovieType() {
-        return this.movieType;
+    public String getMovietype() {
+        return this.movietype;
     }
 
-    public void setMovieType(String movieType) {
-        this.movieType = movieType;
+    public void setMovietype(String movieType) {
+        this.movietype = movieType;
     }
 
     public Actor getMainActor() {
@@ -92,6 +106,14 @@ public class Movie implements Serializable {
 
     public void setMainActor(Actor mainActor) {
         this.mainActor = mainActor;
+    }
+
+    public List<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
     }
 
     public String getDirector() {
@@ -116,8 +138,9 @@ public class Movie implements Serializable {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", copies=" + copies +
-                ", movieType='" + movieType + '\'' +
+                ", movieType='" + movietype + '\'' +
                 ", mainActor=" + mainActor +
+                ", actors=" + actors +
                 ", director='" + director + '\'' +
                 ", releaseYear=" + releaseYear +
                 '}';

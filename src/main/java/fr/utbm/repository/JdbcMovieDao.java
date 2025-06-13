@@ -146,7 +146,7 @@ public class JdbcMovieDao {
             preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, movie.getTitle());
             preparedStatement.setInt(2, movie.getCopies()); // Make sure this is set correctly
-            preparedStatement.setString(3, movie.getMovieType());
+            preparedStatement.setString(3, movie.getMovietype());
             preparedStatement.setString(4, movie.getDirector());
             preparedStatement.setInt(5, movie.getReleaseYear());
 

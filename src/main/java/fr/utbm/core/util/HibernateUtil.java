@@ -1,38 +1,34 @@
 package fr.utbm.core.util;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.EntityManager;
 
 public class HibernateUtil {
-    private static StandardServiceRegistry registry;
-    private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
-                // Create registery
-                registry = new StandardServiceRegistryBuilder().configure().build();
+    private static final EntityManagerFactory sessionFactory;
 
-                // Create Metadata
-                MetadataSources sources = new MetadataSources(registry);
-
-                // Create SessionFactory
-                sessionFactory = sources.buildMetadata().buildSessionFactory();
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (registry != null) {
-                    StandardServiceRegistryBuilder.destroy(registry);
-                }
-            }
-            }
-        return sessionFactory;
+    static {
+        try {
+            // Specify the persistence unit name from your persistence.xml
+            sessionFactory = Persistence.createEntityManagerFactory("movie");
+        } catch (Throwable ex) {
+            System.err.println("Initial EntityManagerFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
     }
 
-    public static void shutdown(){
-        if (registry != null) {
-            StandardServiceRegistryBuilder.destroy(registry);
+    public static EntityManager getEntityManager() {
+        return sessionFactory.createEntityManager();
+    }
+
+    public static void shutdown() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
         }
+    }
+
+    public static EntityManagerFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

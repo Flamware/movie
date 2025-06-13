@@ -17,7 +17,7 @@ public class AppHibernateGetMovies {
 
     public static void main(String[] args) {
         Session session = null;
-
+/*
         // Manage Scanner here using try-with-resources
         try (Scanner mainScanner = new Scanner(System.in)) {
             logger.info("Opening Hibernate session...");
@@ -45,5 +45,6 @@ public class AppHibernateGetMovies {
             logger.info("Hibernate SessionFactory shut down.");
         }
         // mainScanner is automatically closed here
+        */
     }
 }

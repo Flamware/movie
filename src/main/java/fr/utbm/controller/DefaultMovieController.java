@@ -134,8 +134,7 @@ public class DefaultMovieController {
             movie.setDirector(director); // Assuming setter exists
             movie.setReleaseYear(releaseYear); // Assuming setter exists
             movie.setCopies(copies);
-            movie.setMovieType(movieType);
-            movie.setMainActor(mainActorProxy); // Set the proxy actor
+            movie.setMovietype(movieType);
 
             logger.info("Movie details collected: {}", movie); // Log collected details
             return movie;
@@ -245,8 +244,10 @@ public class DefaultMovieController {
 
     /**
      * Retrieves all movies from the service and displays them on the console.
+     *
+     * @return
      */
-    public void getMovies() {
+    public List<Movie> getMovies() {
         logger.info("Attempting to retrieve all movies...");
         try {
             // Call the service method to get the list of movies
@@ -266,10 +267,11 @@ public class DefaultMovieController {
                 }
                 System.out.println("----------------------\n");
             }
+            return movies; // Return the list of movies
         } catch (Exception e) {
-            // Handle potential exceptions from the service layer (e.g., database connection issues)
-            logger.error("Failed to retrieve movies due to an error: {}", e.getMessage(), e);
-            System.err.println("Erreur lors de la récupération de la liste des films: " + e.getMessage());
+            logger.error("Failed to retrieve movies from the service.", e);
+            System.err.println("Erreur lors de la récupération des films: " + e.getMessage()); // User feedback
+            return null; // Return null or an empty list based on your design choice
         }
     }
 }

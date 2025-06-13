@@ -7,8 +7,8 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate
-    database-platform: org.hibernate.dialect.Postgres
+      ddl-auto: update
+      database-platform: org.hibernate.dialect.PostgreSQLDialect # Corrected dialect
     show-sql: true
   mvc:
     view:

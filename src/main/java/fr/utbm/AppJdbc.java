@@ -37,23 +37,6 @@ public class AppJdbc {
             System.out.println("Movie with ID 1 not found.");
          }
 
-         // Example usage: Add a movie
-         Movie newMovie = new Movie(null, "New Movie", 1, "Action", "Director", 2023);
-         movieDao.addMovie(newMovie);
-         System.out.println("New movie added: " + newMovie);
-
-         // Example usage: Update a movie
-         if (movie != null) {
-            movie.setTitle("Updated Movie Title");
-            movieDao.updateMovie(movie);
-            System.out.println("Movie updated: " + movie);
-         }
-
-         // Example usage: Delete a movie
-         if (newMovie.getId() != null) {
-            movieDao.deleteMovie(newMovie.getId());
-            System.out.println("Movie deleted with id: " + newMovie.getId());
-         }
 
       } catch (SQLException e) {
          logger.error("Database error", e);

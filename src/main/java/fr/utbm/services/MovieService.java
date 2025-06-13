@@ -27,61 +27,6 @@ public class MovieService {
         this.filmDao = new HibernateFilmDao(session);
     }
 
-    /**
-     * Registers a new movie, handling transactions and actor relationships.
-     *
-     * @param movie The movie object to register (must contain a valid Actor ID proxy).
-     * @throws IllegalArgumentException if movie is null or actor ID is invalid/not found.
-     * @throws RuntimeException         if a database error occurs.
-     */
-    public void registerMovie(Movie movie) {
-        if (movie == null) {
-            logger.warn("Attempted to register a null movie.");
-            throw new IllegalArgumentException("Movie cannot be null");
-        }
-
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-
-            if (movie.getMainActor() != null && movie.getMainActor().getId() != null) {
-                Integer actorId = movie.getMainActor().getId();
-                // Use session.get as Actor might not have a dedicated DAO method
-                Actor persistentActor = session.get(Actor.class, actorId);
-
-                if (persistentActor != null) {
-                    movie.setMainActor(persistentActor);
-                    logger.debug("Associated movie with persistent actor ID: {}", actorId);
-                } else {
-                    logger.error("Actor with ID {} not found. Cannot register movie.", actorId);
-                    if (tx != null) tx.rollback();
-                    throw new IllegalArgumentException("Actor with ID " + actorId + " not found.");
-                }
-            } else {
-                logger.warn("Movie registration attempt without a valid main actor ID. MainActor: {}", movie.getMainActor());
-                if (tx != null) tx.rollback();
-                throw new IllegalArgumentException("Main actor ID is required to register a movie.");
-            }
-
-            logger.info("Attempting to save movie: {}", movie);
-            filmDao.saveMovie(movie); // Assumes MovieDao interface has saveMovie
-
-            tx.commit();
-            logger.info("Movie registered successfully: {}", movie.getId()); // Log ID after commit
-
-        } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
-                try {
-                    tx.rollback();
-                    logger.info("Transaction rolled back due to error during movie registration.");
-                } catch (Exception rbEx) {
-                    logger.error("Could not rollback transaction after failure", rbEx);
-                }
-            }
-            logger.error("Failed to register movie with title '{}'", movie.getTitle(), e);
-            throw new RuntimeException("Error while registering the movie", e);
-        }
-    }
 
     /**
      * Retrieves a movie by its ID.
